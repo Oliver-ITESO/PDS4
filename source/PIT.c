@@ -59,7 +59,7 @@ void configureTimer(void)
 	PIT_EnableInterrupts(PIT, kPIT_Chnl_1, kPIT_TimerInterruptEnable);
 
 	EnableIRQ(PIT1_IRQn);
-	PIT_StartTimer(PIT, kPIT_Chnl_1);
+	//PIT_StartTimer(PIT, kPIT_Chnl_1);
 
 }
 

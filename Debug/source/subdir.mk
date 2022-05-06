@@ -10,6 +10,7 @@ C_SRCS += \
 ../source/LED.c \
 ../source/NVIC.c \
 ../source/PIT.c \
+../source/RGB.c \
 ../source/SPI.c \
 ../source/main.c \
 ../source/semihost_hardfault.c 
@@ -21,6 +22,7 @@ OBJS += \
 ./source/LED.o \
 ./source/NVIC.o \
 ./source/PIT.o \
+./source/RGB.o \
 ./source/SPI.o \
 ./source/main.o \
 ./source/semihost_hardfault.o 
@@ -32,6 +34,7 @@ C_DEPS += \
 ./source/LED.d \
 ./source/NVIC.d \
 ./source/PIT.d \
+./source/RGB.d \
 ./source/SPI.d \
 ./source/main.d \
 ./source/semihost_hardfault.d 

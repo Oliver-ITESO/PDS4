@@ -21,7 +21,10 @@ source/main.o source/main.d: ../source/main.c ../source/ADC.h \
  ../source/LCD_nokia.h ../source/NVIC.h \
  C:\PROJECTS\PDS_P4\Guitar_Strings\device/MK64F12.h \
  ../source/Frequency_check.h \
- C:\PROJECTS\PDS_P4\Guitar_Strings\drivers/fsl_ftm.h
+ C:\PROJECTS\PDS_P4\Guitar_Strings\drivers/fsl_ftm.h ../source/RGB.h \
+ C:\PROJECTS\PDS_P4\Guitar_Strings\board/pin_mux.h \
+ C:\PROJECTS\PDS_P4\Guitar_Strings\board/board.h \
+ C:\PROJECTS\PDS_P4\Guitar_Strings\board/clock_config.h
 ../source/ADC.h:
 C:\PROJECTS\PDS_P4\Guitar_Strings\drivers/fsl_adc16.h:
 C:\PROJECTS\PDS_P4\Guitar_Strings\drivers/fsl_common.h:
@@ -50,3 +53,7 @@ C:\PROJECTS\PDS_P4\Guitar_Strings\drivers/fsl_common.h:
 C:\PROJECTS\PDS_P4\Guitar_Strings\device/MK64F12.h:
 ../source/Frequency_check.h:
 C:\PROJECTS\PDS_P4\Guitar_Strings\drivers/fsl_ftm.h:
+../source/RGB.h:
+C:\PROJECTS\PDS_P4\Guitar_Strings\board/pin_mux.h:
+C:\PROJECTS\PDS_P4\Guitar_Strings\board/board.h:
+C:\PROJECTS\PDS_P4\Guitar_Strings\board/clock_config.h:

@@ -43,7 +43,7 @@ uint32_t ADC_Read(void)
 	{
 	}
 	ADC_read = ADC16_GetChannelConversionValue(ADC0, 0);
-	if(MIN_ADC_VALUE == ADC_read)
+	if(MIN_ADC_VALUE <= ADC_read)
 	{
 		set_ADC_flag();
 	}
@@ -58,7 +58,6 @@ boolean_t read_ADC_flag(void)
 
 void set_ADC_flag(void)
 {
-
 	flag = TRUE;
 }
 void clear_ADC_flag(void)
