@@ -45,6 +45,10 @@ int main(void) {
 			PIT_StartTimer(PIT, kPIT_Chnl_1);
 			clear_ADC_flag();
 		}
+		if(readFlagTimer())
+		{
+
+		}
 
     }
     return 0 ;
