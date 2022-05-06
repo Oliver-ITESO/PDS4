@@ -1,0 +1,5 @@
+C:\PROJECTS\PDS_P4\Guitar_Strings\drivers/fsl_clock.h:668:20:CLOCK_EnableClock	24	static
+C:\PROJECTS\PDS_P4\Guitar_Strings\drivers/fsl_clock.h:889:20:CLOCK_SetSimSafeDivs	4	static
+C:\PROJECTS\PDS_P4\Guitar_Strings\drivers/fsl_port.h:374:20:PORT_SetPinMux	24	static
+../source/SPI.c:5:6:SPI_config_Screen	48	static
+../source/SPI.c:48:6:SPI_config_Memory	48	static
