@@ -10,7 +10,7 @@
 #include "fsl_pit.h"
 #include "Bits.h"
 
-#define MSTOCOUNTINIT 30
+#define MSTOCOUNTINIT 100
 
 #define ADC_MS 1
 #define PIT_SOURCE_CLOCK CLOCK_GetFreq(kCLOCK_BusClk)

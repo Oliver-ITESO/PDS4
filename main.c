@@ -18,15 +18,15 @@
  * @brief   Application entry point.
  */
 
-#define VECTOR_SIZE 180*2
+#define VECTOR_SIZE 590*3
 
 int main(void) {
 
 	uint32_t index;
-
 	uint32_t adc_value;
 	uint32_t vectorADC[VECTOR_SIZE] = {0};
 	uint32_t vectorADC_copy[VECTOR_SIZE] = {0};
+	uint32_t vectorCorr[VECTOR_SIZE] = {0};
 
 	SPI_config_Screen();
 	configureTimer();
@@ -63,26 +63,35 @@ int main(void) {
 
 		if(readFlagTimer())
 		{
+			PIT_StopTimer(PIT, kPIT_Chnl_0);
+			PIT_StopTimer(PIT, kPIT_Chnl_1);
 			clearFlagTimer();
-			for(uint16_t x = 0; x<VECTOR_SIZE; x++)
+			for(uint16_t x = 0; x<VECTOR_SIZE/3; x++)
 			{
-				vectorADC_copy[(VECTOR_SIZE/2)+x] = vectorADC[x];
+				vectorADC_copy[(VECTOR_SIZE/3)+x] = vectorADC[x];
 			}
-
+			for(uint16_t z = 1; z<=240; z++)
+			{
+				for(int16_t i = (VECTOR_SIZE/3)-1; i>=-1; i--)
+				{
+					if(i==-1)
+					{
+						vectorADC[i+z]=0;
+					}
+					else
+					{
+						vectorADC[i+z] = vectorADC[i+(z-1)];
+					}
+				}
+				for(uint16_t j = 0; j<VECTOR_SIZE ;j++)
+				{
+					vectorCorr[z] += vectorADC[j]/100 * vectorADC_copy[j]/100;
+				}
+			}
+			writeLED(RED, !BIT_OFF);
+			writeLED(GREEN, !BIT_ON);
 		}
-		/*
-		if(readCorrelacionFlag())
-		{
-			clearCorrelacionFlag();
-			//calcular frecuencia
-		}
-		if(readFrecuenciaFlag())
-		{
-			clearFrecuenciaFlag();
-			writeLED(RED, BIT_OFF);
-			writeLED(GREEN, BIT_ON);
-		}*/
-
-    }
+	}
     return 0 ;
 }
+
