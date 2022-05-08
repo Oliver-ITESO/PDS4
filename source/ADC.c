@@ -8,6 +8,9 @@
 #include "ADC.h"
 
 boolean_t flag = FALSE;
+boolean_t flag_save = FALSE;
+
+uint32_t ADC_read = 0;
 
 void Configure_ADC(void)
 {
@@ -32,7 +35,6 @@ void Configure_ADC(void)
 
 uint32_t ADC_Read(void)
 {
-	uint32_t ADC_read = 0;
 	adc16_channel_config_t adc16ChannelConfigStruct;
 	adc16ChannelConfigStruct.channelNumber                        = 12U;
 	adc16ChannelConfigStruct.enableInterruptOnConversionCompleted = false;
@@ -43,10 +45,16 @@ uint32_t ADC_Read(void)
 	{
 	}
 	ADC_read = ADC16_GetChannelConversionValue(ADC0, 0);
+	flag_save = TRUE;
 	if(MIN_ADC_VALUE <= ADC_read)
 	{
 		set_ADC_flag();
 	}
+	return ADC_read;
+}
+
+uint32_t getValueADC(void)
+{
 	return ADC_read;
 }
 
@@ -62,6 +70,15 @@ void set_ADC_flag(void)
 }
 void clear_ADC_flag(void)
 {
-
 	flag = FALSE;
+}
+
+boolean_t read_flag_save_adc(void)
+{
+	return flag_save;
+}
+
+void clear_flag_save_adc(void)
+{
+	flag_save = FALSE;
 }

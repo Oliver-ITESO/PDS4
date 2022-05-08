@@ -10,9 +10,9 @@
 #include "fsl_pit.h"
 #include "Bits.h"
 
-#define MSTOCOUNTINIT 1000
+#define MSTOCOUNTINIT 100
 
-#define ADC_MS 10
+#define ADC_MS 1
 #define PIT_SOURCE_CLOCK CLOCK_GetFreq(kCLOCK_BusClk)
 
 typedef enum PITCHANNEL

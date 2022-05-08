@@ -18,10 +18,14 @@ void Configure_ADC(void);
 uint32_t ADC_Read(void);
 
 boolean_t read_ADC_flag(void);
+uint32_t getValueADC(void);
 void set_ADC_flag(void);
 void clear_ADC_flag(void);
 
-#define MIN_ADC_VALUE 200
+boolean_t read_flag_save_adc(void);
+void clear_flag_save_adc(void);
+
+#define MIN_ADC_VALUE 2800
 #define CONVERSION 3.3/4095
 
 #endif /* ADC_H_ */
