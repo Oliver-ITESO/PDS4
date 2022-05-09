@@ -49,9 +49,11 @@ int main(void) {
 
 		if(read_ADC_flag())
 		{
+			PIT_StartTimer(PIT, kPIT_Chnl_0);
+			while(!readFlagTimer());
+			clearFlagTimer();
 			writeLED(RED, !BIT_ON);
 			writeLED(GREEN, !BIT_OFF);
-			PIT_StartTimer(PIT, kPIT_Chnl_0);
 			clear_ADC_flag();
 			index = 0;
 			while(!readFlagTimer())
@@ -100,7 +102,24 @@ int main(void) {
 				vectorCorr[z] /= 1000000;
 			}
 			//Leemos frecuencia
-			double freq = frequencyvalue()-10;
+			double freq = frequencyvalue();
+
+			if(freq<155)
+			{
+				freq-=12;
+			}
+			else if(freq<218)
+			{
+				freq-=17;
+			}
+			else if(freq < 290)
+			{
+				freq-=20;
+			}
+			else
+			{
+				freq-=40;
+			}
 			uint8_t freq_cm = freq/100;
 			uint8_t freq_dm = (freq-freq_cm*100)/10;
 			uint8_t freq_m = (freq-freq_cm*100-freq_dm*10);
@@ -128,7 +147,9 @@ int main(void) {
 		}
 
 		PIT_StartTimer(PIT, kPIT_Chnl_1);
+		clear_ADC_flag();
 		writeLED(RED, !BIT_OFF);
+
 		writeLED(GREEN, !BIT_ON);
 	}
     return 0 ;
@@ -141,15 +162,22 @@ double frequencyvalue()
 	tmp_index = VECTOR_SIZE-1;
 	while(flag_down<2)
 	{
-		if((vectorCorr[tmp_index]<vectorCorr[tmp_index-1])&&flag_down == 0)
+		if(tmp_index>=1)
 		{
-			flag_down++;
-		}
-		if((vectorCorr[tmp_index]>vectorCorr[tmp_index-1])&&flag_down == 1)
-		{
-			flag_down++;
-		}
+			if(((vectorCorr[tmp_index]-vectorCorr[tmp_index-1])<= 4)&&flag_down == 0)
+			{
+				flag_down++;
+			}
+			else if(((vectorCorr[tmp_index]-vectorCorr[tmp_index-1])>=6)&&flag_down == 1)
+			{
+				flag_down++;
+			}
 		tmp_index--;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 	x = (1/((400.0-(float)tmp_index)*0.000086956));
