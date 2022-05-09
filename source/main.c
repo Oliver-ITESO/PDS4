@@ -104,7 +104,11 @@ int main(void) {
 			//Leemos frecuencia
 			double freq = frequencyvalue();
 
-			if(freq<155)
+			if(freq < 90)
+			{
+				freq = freq;
+			}
+			else if(freq<155)
 			{
 				freq-=12;
 			}

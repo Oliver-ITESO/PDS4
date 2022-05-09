@@ -6,7 +6,7 @@
  * Generated linker script file for MK64FN1M0xxx12
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.30
- * MCUXpresso IDE v11.5.0 [Build 7232] [2022-01-11] on 9 may 2022 0:22:15
+ * MCUXpresso IDE v11.5.0 [Build 7232] [2022-01-11] on 9 may 2022 0:34:39
  */
 
 INCLUDE "Guitar_Strings_Debug_library.ld"
