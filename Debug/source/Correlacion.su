@@ -1,0 +1,6 @@
+../source/Correlacion.c:11:11:readCorrelacionFlag	4	static
+../source/Correlacion.c:16:6:setCorrelacionFlag	4	static
+../source/Correlacion.c:21:6:clearCorrelacionFlag	4	static
+../source/Correlacion.c:26:11:readFrecuenciaFlag	4	static
+../source/Correlacion.c:31:6:clearFrecuenciaFlag	4	static
+../source/Correlacion.c:36:6:setFrecuenciaFlag	4	static

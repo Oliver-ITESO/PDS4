@@ -5,7 +5,7 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../source/ADC.c \
-../source/Frequency_check.c \
+../source/Correlacion.c \
 ../source/LCD_nokia.c \
 ../source/LED.c \
 ../source/NVIC.c \
@@ -17,7 +17,7 @@ C_SRCS += \
 
 OBJS += \
 ./source/ADC.o \
-./source/Frequency_check.o \
+./source/Correlacion.o \
 ./source/LCD_nokia.o \
 ./source/LED.o \
 ./source/NVIC.o \
@@ -29,7 +29,7 @@ OBJS += \
 
 C_DEPS += \
 ./source/ADC.d \
-./source/Frequency_check.d \
+./source/Correlacion.d \
 ./source/LCD_nokia.d \
 ./source/LED.d \
 ./source/NVIC.d \

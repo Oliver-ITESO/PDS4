@@ -55,7 +55,7 @@ void configureTimer(void)
 	//PIT_StartTimer(PIT, kPIT_Chnl_0);
 
 	//Para el ADC
-	PIT_SetTimerPeriod(PIT, kPIT_Chnl_1, 2000);
+	PIT_SetTimerPeriod(PIT, kPIT_Chnl_1, 1000);
 	PIT_EnableInterrupts(PIT, kPIT_Chnl_1, kPIT_TimerInterruptEnable);
 	PIT_StartTimer(PIT, kPIT_Chnl_1);
 	//EnableIRQ(PIT1_IRQn);

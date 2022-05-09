@@ -18,17 +18,20 @@
  * @brief   Application entry point.
  */
 
-#define VECTOR_SIZE 590*3
+#define VECTOR_SIZE 400
+
+double frequencyvalue();
+uint32_t vectorCorr[VECTOR_SIZE*2] = {0};
 
 int main(void) {
 
 	uint32_t index;
-	uint32_t adc_value;
 	uint32_t vectorADC[VECTOR_SIZE] = {0};
-	uint32_t vectorADC_copy[VECTOR_SIZE] = {0};
-	uint32_t vectorCorr[VECTOR_SIZE] = {0};
+
 
 	SPI_config_Screen();
+	LCD_nokia_init();
+
 	configureTimer();
 	Configure_ADC();
 	configRGB();
@@ -41,7 +44,8 @@ int main(void) {
 
 	NVIC_global_enable_interrupts;
 
-	while(1) {
+	while(1)
+	{
 
 		if(read_ADC_flag())
 		{
@@ -66,32 +70,88 @@ int main(void) {
 			PIT_StopTimer(PIT, kPIT_Chnl_0);
 			PIT_StopTimer(PIT, kPIT_Chnl_1);
 			clearFlagTimer();
-			for(uint16_t x = 0; x<VECTOR_SIZE/3; x++)
+			int16_t virtual_index_start;
+			uint32_t virtual_value;
+			uint32_t virtual_value_c;
+			for(uint16_t z = 1; z<=(VECTOR_SIZE*2)-1; z++)
 			{
-				vectorADC_copy[(VECTOR_SIZE/3)+x] = vectorADC[x];
-			}
-			for(uint16_t z = 1; z<=240; z++)
-			{
-				for(int16_t i = (VECTOR_SIZE/3)-1; i>=-1; i--)
+				virtual_index_start = VECTOR_SIZE-z;
+
+				for(uint16_t c = 0 ; c<z ; c++)
 				{
-					if(i==-1)
+					if((virtual_index_start+c) >= 0)
 					{
-						vectorADC[i+z]=0;
+						virtual_value_c = vectorADC[virtual_index_start+c];
 					}
 					else
 					{
-						vectorADC[i+z] = vectorADC[i+(z-1)];
+						virtual_value_c = 0;
 					}
+					if(c < VECTOR_SIZE)
+					{
+						virtual_value = vectorADC[c];
+					}
+					else
+					{
+						virtual_value = 0;
+					}
+					vectorCorr[z] += (virtual_value*virtual_value_c);
 				}
-				for(uint16_t j = 0; j<VECTOR_SIZE ;j++)
-				{
-					vectorCorr[z] += vectorADC[j]/100 * vectorADC_copy[j]/100;
-				}
+				vectorCorr[z] /= 1000000;
 			}
-			writeLED(RED, !BIT_OFF);
-			writeLED(GREEN, !BIT_ON);
+			//Leemos frecuencia
+			double freq = frequencyvalue()-10;
+			uint8_t freq_cm = freq/100;
+			uint8_t freq_dm = (freq-freq_cm*100)/10;
+			uint8_t freq_m = (freq-freq_cm*100-freq_dm*10);
+			uint8_t freq_cent = (freq-freq_cm*100-freq_dm*10-freq_m)*10;
+			uint8_t freq_dec = ((freq*10)-freq_cm*1000-freq_dm*100-freq_m*10-freq_cent)*10;
+
+			freq_cm += '0';
+			freq_dm += '0';
+			freq_m += '0';
+			freq_cent += '0';
+			freq_dec += '0';
+
+
+			uint8_t freq_string[] =  ("Freq Hz");
+				LCD_nokia_clear();
+				//Send voltage
+				LCD_nokia_send_string(freq_string);
+				LCD_nokia_goto_xy(0, 1);
+				LCD_nokia_send_char(freq_cm);
+				LCD_nokia_send_char(freq_dm);
+				LCD_nokia_send_char(freq_m);
+				LCD_nokia_send_char('.');
+				LCD_nokia_send_char(freq_cent);
+				LCD_nokia_send_char(freq_dec);
 		}
+
+		PIT_StartTimer(PIT, kPIT_Chnl_1);
+		writeLED(RED, !BIT_OFF);
+		writeLED(GREEN, !BIT_ON);
 	}
     return 0 ;
 }
+double frequencyvalue()
+{
+	uint8_t flag_down = FALSE;
+	uint16_t tmp_index = 0;
+	double x = 0;
+	tmp_index = VECTOR_SIZE-1;
+	while(flag_down<2)
+	{
+		if((vectorCorr[tmp_index]<vectorCorr[tmp_index-1])&&flag_down == 0)
+		{
+			flag_down++;
+		}
+		if((vectorCorr[tmp_index]>vectorCorr[tmp_index-1])&&flag_down == 1)
+		{
+			flag_down++;
+		}
+		tmp_index--;
+	}
 
+	x = (1/((400.0-(float)tmp_index)*0.000086956));
+	return x;
+}
