@@ -19,15 +19,16 @@
  */
 
 #define VECTOR_SIZE 400
+#define CONST 2048
 
 double frequencyvalue();
-uint32_t vectorCorr[VECTOR_SIZE*2] = {0};
+
+int32_t vectorCorr[VECTOR_SIZE*2] = {0};
 
 int main(void) {
 
 	uint32_t index;
-	uint32_t vectorADC[VECTOR_SIZE] = {0};
-
+	int32_t vectorADC[VECTOR_SIZE] = {0};
 
 	SPI_config_Screen();
 	LCD_nokia_init();
@@ -75,6 +76,16 @@ int main(void) {
 			int16_t virtual_index_start;
 			uint32_t virtual_value;
 			uint32_t virtual_value_c;
+
+			//Adecuacion de vector para negativos y positivos
+			for(uint16_t v = 0 ; v < VECTOR_SIZE; v++)
+			{
+				if(vectorADC[v] != 0)
+				{
+					vectorADC[v] = vectorADC[v]-CONST;
+				}
+			}
+			//Correlacion
 			for(uint16_t z = 1; z<=(VECTOR_SIZE*2)-1; z++)
 			{
 				virtual_index_start = VECTOR_SIZE-z;
@@ -97,33 +108,13 @@ int main(void) {
 					{
 						virtual_value = 0;
 					}
-					vectorCorr[z] += (virtual_value*virtual_value_c);
+					vectorCorr[z] += (virtual_value*virtual_value_c)/10000000;
 				}
-				vectorCorr[z] /= 1000000;
+				vectorCorr[z] /= 100;
 			}
 			//Leemos frecuencia
 			double freq = frequencyvalue();
 
-			if(freq < 90)
-			{
-				freq = freq;
-			}
-			else if(freq<155)
-			{
-				freq-=12;
-			}
-			else if(freq<218)
-			{
-				freq-=17;
-			}
-			else if(freq < 290)
-			{
-				freq-=20;
-			}
-			else
-			{
-				freq-=40;
-			}
 			uint8_t freq_cm = freq/100;
 			uint8_t freq_dm = (freq-freq_cm*100)/10;
 			uint8_t freq_m = (freq-freq_cm*100-freq_dm*10);
@@ -163,27 +154,26 @@ double frequencyvalue()
 	uint8_t flag_down = FALSE;
 	uint16_t tmp_index = 0;
 	double x = 0;
-	tmp_index = VECTOR_SIZE-1;
+	tmp_index = VECTOR_SIZE-2;
 	while(flag_down<2)
 	{
 		if(tmp_index>=1)
 		{
-			if(((vectorCorr[tmp_index]-vectorCorr[tmp_index-1])<= 4)&&flag_down == 0)
+			if(((vectorCorr[tmp_index] > vectorCorr[tmp_index-1]))&&(flag_down == 0))
 			{
 				flag_down++;
 			}
-			else if(((vectorCorr[tmp_index]-vectorCorr[tmp_index-1])>=6)&&flag_down == 1)
+			else if(((vectorCorr[tmp_index]<vectorCorr[tmp_index-1]))&&(flag_down == 1))
 			{
 				flag_down++;
 			}
-		tmp_index--;
+			tmp_index--;
 		}
 		else
 		{
 			return 0;
 		}
 	}
-
 	x = (1/((400.0-(float)tmp_index)*0.000086956));
 	return x;
 }
